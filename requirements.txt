@@ -1,3 +1,6 @@
+selenium
+lxml
+cssutils
 beautifulsoup4
 requests
 mysql
