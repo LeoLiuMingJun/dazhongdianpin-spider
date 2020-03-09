@@ -132,4 +132,6 @@ dmypy.json
 .idea/
 
 # data file and svg source file
-.csv
+*.csv
+*.dat
+
