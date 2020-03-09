@@ -130,3 +130,6 @@ dmypy.json
 
 # Pycharm config
 .idea/
+
+# data file and svg source file
+.csv
