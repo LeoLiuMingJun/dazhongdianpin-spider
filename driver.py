@@ -1,7 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
-from main import DRIVER_PATH
+DRIVER_PATH = '/Users/mingjunliu/Library/chromedriver'
 
 
 class Driver(object):

@@ -2,7 +2,7 @@ import time
 
 from reviews import StoreReviews
 
-DRIVER_PATH = '/Users/mingjunliu/Library/chromedriver'
+
 
 if __name__ == '__main__':
     stores = [128015796, ]
