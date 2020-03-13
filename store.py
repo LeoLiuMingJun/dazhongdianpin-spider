@@ -9,7 +9,7 @@ from driver import Driver
 
 class StoreInfo(object):
     reference_data = {
-        'food': 'ch10',
+        "food": "ch10",
     }
 
     def __init__(self, city, industry):
@@ -23,25 +23,32 @@ class StoreInfo(object):
 
         reviews = self.driver.find_elements_by_xpath('//*[@id="shop-all-list"]/ul/li')
         for review in reviews:
-            info = {}
-            info['store_id'] = review.find_element_by_xpath('.//div[contains(@class,"pic")]/a').get_attribute(
-                'data-shopid')
-            info['city'] = self.city
-            info['industry'] = self.industry
-            info['store_name'] = review.find_element_by_xpath('.//div[contains(@class,"pic")]/a/img').get_attribute(
-                'title')
+            info = {
+                "store_id": review.find_element_by_xpath(
+                    './/div[contains(@class,"pic")]/a'
+                ).get_attribute("data-shopid"),
+                "city": self.city,
+                "industry": self.industry,
+                "store_name": review.find_element_by_xpath(
+                    './/div[contains(@class,"pic")]/a/img'
+                ).get_attribute("title"),
+            }
             try:
-                info['store_score'] = review.find_element_by_xpath('.//div[contains(@class,"star_score_sml")]').text
-            except:
-                info['store_score'] = '0'
+                info["store_score"] = review.find_element_by_xpath(
+                    './/div[contains(@class,"star_score_sml")]'
+                ).text
+            except exceptions.NoSuchElementException:
+                info["store_score"] = "0"
 
             result.append(info)
 
         return result
 
     def run(self):
-        print(f'collecting store info {self.city}, {self.industry} started')
-        basic_url = f"https://www.dianping.com/{self.city}/{self.reference_data[self.industry]}"
+        print(f"collecting store info {self.city}, {self.industry} started")
+        basic_url = (
+            f"https://www.dianping.com/{self.city}/{self.reference_data[self.industry]}"
+        )
 
         self.driver.get(basic_url)
         time.sleep(60)
@@ -50,38 +57,42 @@ class StoreInfo(object):
         count = 1
         while True:
             result.extend(self.get_content_list())
-            print(f'now page {count}')
+            print(f"now page {count}")
             count += 1
             try:
-                next_url = self.driver.find_element_by_xpath('//*[@title="下一页"]').get_attribute("href")
-                self.driver.get(next_url.replace('http', 'https'))
+                next_url = self.driver.find_element_by_xpath(
+                    '//*[@title="下一页"]'
+                ).get_attribute("href")
+                self.driver.get(next_url.replace("http", "https"))
                 # time.sleep(5)
             except exceptions.NoSuchElementException:  # last page
-                print('Already last page')
+                print("Already last page")
                 break
 
         # self.save_content(content_list)
         print(f"store info done")
 
-        with open('./store.csv', 'a') as f:
-            fieldnames = ['store_id',
-                          'store_name',
-                          'city',
-                          'industry',
-                          'store_score', ]
+        with open("data/store.csv", "a") as f:
+            fieldnames = [
+                "store_id",
+                "store_name",
+                "city",
+                "industry",
+                "store_score",
+            ]
             writer = csv.DictWriter(f, fieldnames=fieldnames)
-            if os.stat("./store.csv").st_size == 0:
+            if os.stat("data/store.csv").st_size == 0:
                 writer.writeheader()
             for record in result:
                 writer.writerow(record)
-            f.write('\n')
+            f.write("\n")
         time.sleep(5)
         self.driver.quit()
 
 
 if __name__ == "__main__":
     start_time = time.time()
-    location = [
+    locations = [
         # 'suzhou',
         # 'xian',
         # 'tianjin',
@@ -94,6 +105,6 @@ if __name__ == "__main__":
         # 'dongguan',
         # 'wuxi',
     ]
-    for l in location:
-        StoreInfo(l, 'food').run()
+    for location in locations:
+        StoreInfo(location, "food").run()
         print("--- %s seconds ---" % (time.time() - start_time))

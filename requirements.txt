@@ -3,4 +3,3 @@ lxml
 cssutils
 beautifulsoup4
 requests
-
