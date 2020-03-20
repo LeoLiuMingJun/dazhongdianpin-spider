@@ -10,6 +10,7 @@ from driver import Driver
 class StoreInfo(object):
     reference_data = {
         "food": "ch10",
+        "SPA": "ch50/g158",
     }
 
     def __init__(self, city, industry):
@@ -93,18 +94,27 @@ class StoreInfo(object):
 if __name__ == "__main__":
     start_time = time.time()
     locations = [
-        # 'suzhou',
-        # 'xian',
-        # 'tianjin',
-        # 'nanjing',
-        # 'zhengzhou',
-        # 'changsha',
-        # 'shenyang',
-        # 'qingdao',
-        # 'ningbo',
-        # 'dongguan',
-        # 'wuxi',
+        "beijing",
+        "shanghai",
+        "guangzhou",
+        "shenzheng",
+        "chengdu",
+        "hangzhou",
+        "chongqing",
+        "wuhan",
+        "suzhou",
+        "xian",
+        "tianjin",
+        "nanjing",
+        "zhengzhou",
+        "changsha",
+        "shenyang",
+        "qingdao",
+        "ningbo",
+        "dongguan",
+        "wuxi",
     ]
     for location in locations:
-        StoreInfo(location, "food").run()
+        StoreInfo(location, "SPA").run()
         print("--- %s seconds ---" % (time.time() - start_time))
+        time.sleep(10)

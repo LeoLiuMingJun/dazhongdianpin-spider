@@ -15,7 +15,7 @@ class StoreReviews(object):
         self.city = city
         self.industry = industry
         self.driver = Driver().driver
-        time.sleep(1)
+        # time.sleep(1)
 
     def get_content_list(self, mapping):
         result = []
@@ -100,7 +100,7 @@ class StoreReviews(object):
         basic_url = f"http://www.dianping.com/shop/{self.store_id}/review_all"
 
         self.driver.get(basic_url)
-        time.sleep(60)
+        # time.sleep(60)
         result = []
 
         count = 1
@@ -114,7 +114,7 @@ class StoreReviews(object):
             count += 1
             try:
                 self.driver.find_element_by_xpath('//*[@title="下一页"]').click()
-                time.sleep(10)
+                # time.sleep(10)
             except exceptions.NoSuchElementException:  # last page
                 print("Already last page")
                 break
@@ -145,7 +145,7 @@ class StoreReviews(object):
             for record in result:
                 writer.writerow(record)
 
-        time.sleep(5)
+        # time.sleep(5)
         self.driver.quit()
 
 
