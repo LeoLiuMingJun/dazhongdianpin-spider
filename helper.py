@@ -5,6 +5,7 @@ import re
 import cssutils
 import requests
 import xml.etree.ElementTree as ET
+from lxml import etree
 
 
 def class2score(s):
@@ -52,6 +53,8 @@ def get_css(css_url):
     for key, value in svg_dct.items():
         url = value["background-image"].replace("url(//", "").replace(");", "")
         page = requests.get(f"https://{url}").text
+        html = etree.HTML(bytes(requests.get(f"https://{url}").text, "utf-8"))
+        result = html.xpath("//text")
         tree = ET.fromstring(page)
         reference = []
         tag = tree.tag[:tree.tag.find('}') + 1]
@@ -64,13 +67,21 @@ def get_css(css_url):
         text_paths = tree.findall(f'./{tag}text/{tag}textPath')
         count = 0
         x = 0
-        for t in text_paths:
-            y = reference[count]
-            count += 1
-            for c in t.text:
-                _mapping[f"{key},{x},{y}"] = c
-                x += 1
-            x = 0
+        if text_paths:
+            for t in text_paths:
+                y = reference[count]
+                count += 1
+                for c in t.text:
+                    _mapping[f"{key},{x},{y}"] = c
+                    x += 1
+                x = 0
+        else:
+            for txt in result:
+                y = txt.attrib["y"]
+                for c in txt.text:
+                    _mapping[f"{key},{x},{y}"] = c
+                    x += 1
+                x = 0
     _tmp = {}
     for key, value in css_dct.items():
         index_re = r".+?(\d+).+?(\d+).+"

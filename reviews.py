@@ -32,6 +32,22 @@ class StoreReviews(object):
                 "author_id": review.find_element_by_xpath("./a").get_attribute(
                     "data-user-id"
                 ),
+                "detail-1 name": "",
+                "detail-1 score": "",
+                "detail-2 name": "",
+                "detail-2 score": "",
+                "detail-3 name": "",
+                "detail-3 score": "",
+                "detail-4 name": "",
+                "detail-4 score": "",
+                "detail-5 name": "",
+                "detail-5 score": "",
+                "detail-6 name": "",
+                "detail-6 score": "",
+                "detail-7 name": "",
+                "detail-7 score": "",
+                "detail-8 name": "",
+                "detail-8 score": "",
                 "total_score": class2score(
                     review.find_element_by_xpath(
                         './div/div[@class="review-rank"]/span[contains (@class,"sml-rank-stars")]'
@@ -42,9 +58,8 @@ class StoreReviews(object):
 
             #  info['detail_score']
             for score in review.find_elements_by_xpath(
-                './div/div[@class="review-rank"]/span[@class= "score"]/span'
+                    './div/div[@class="review-rank"]/span[@class= "score"]/span'
             ):
-
                 n, s = score.text.split("：")
                 info[f"detail-{i} name"] = n
                 info[f"detail-{i} score"] = s
@@ -87,7 +102,7 @@ class StoreReviews(object):
                 else:
                     word.append(c)
 
-            info["content"] = "".join(word)
+            info["content"] = ("".join(word)).replace('\n', '').strip()
             # //*[@id="review_689070127_action"]/span[1]
             info["time_stamp"] = str(
                 review.find_element_by_xpath('.//span[@class= "time"]').text
@@ -118,7 +133,7 @@ class StoreReviews(object):
                 break
             try:
                 self.driver.find_element_by_xpath('//*[@title="下一页"]').click()
-                time.sleep(10)
+                time.sleep(5)
             except exceptions.NoSuchElementException:  # last page
                 print("Already last page")
                 break
@@ -139,9 +154,19 @@ class StoreReviews(object):
                 "detail-2 score",
                 "detail-3 name",
                 "detail-3 score",
+                "detail-4 name",
+                "detail-4 score",
+                "detail-5 name",
+                "detail-5 score",
+                "detail-6 name",
+                "detail-6 score",
+                "detail-7 name",
+                "detail-7 score",
+                "detail-8 name",
+                "detail-8 score",
                 "free_trial",
-                "content",
                 "time_stamp",
+                "content",
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             if os.stat("data/reviews.csv").st_size == 0:
