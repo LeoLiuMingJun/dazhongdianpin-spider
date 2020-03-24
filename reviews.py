@@ -24,7 +24,7 @@ class StoreReviews(object):
             '//*[@id="review-list"]/div[2]/div[3]/div[3]/div[3]/ul/li'
         )
         for review in reviews:
-            print(review.text)
+            # print(review.text)
             info = {
                 "store_id": self.store_id,
                 "city": self.city,
@@ -44,6 +44,7 @@ class StoreReviews(object):
             for score in review.find_elements_by_xpath(
                 './div/div[@class="review-rank"]/span[@class= "score"]/span'
             ):
+
                 n, s = score.text.split("：")
                 info[f"detail-{i} name"] = n
                 info[f"detail-{i} score"] = s
@@ -114,7 +115,7 @@ class StoreReviews(object):
             count += 1
             try:
                 self.driver.find_element_by_xpath('//*[@title="下一页"]').click()
-                # time.sleep(10)
+                time.sleep(10)
             except exceptions.NoSuchElementException:  # last page
                 print("Already last page")
                 break

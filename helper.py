@@ -4,7 +4,7 @@ import re
 
 import cssutils
 import requests
-from lxml import etree
+import xml.etree.ElementTree as ET
 
 
 def class2score(s):
@@ -51,12 +51,23 @@ def get_css(css_url):
     _mapping = {}
     for key, value in svg_dct.items():
         url = value["background-image"].replace("url(//", "").replace(");", "")
-        html = etree.HTML(bytes(requests.get(f"https://{url}").text, "utf-8"))
-        result = html.xpath("//text")
+        page = requests.get(f"https://{url}").text
+        tree = ET.fromstring(page)
+        reference = []
+        tag = tree.tag[:tree.tag.find('}') + 1]
+        # 获取 Y 值
+        paths = tree.findall(f'./{tag}defs/{tag}path')
+        for path in paths:
+            y = re.findall(r" (\d+) ", path.attrib['d'])[0]
+            reference.append(y)
+
+        text_paths = tree.findall(f'./{tag}text/{tag}textPath')
+        count = 0
         x = 0
-        for txt in result:
-            y = txt.attrib["y"]
-            for c in txt.text:
+        for t in text_paths:
+            y = reference[count]
+            count += 1
+            for c in t.text:
                 _mapping[f"{key},{x},{y}"] = c
                 x += 1
             x = 0
@@ -77,3 +88,9 @@ def get_css(css_url):
         f.write(js_obj)
 
     return _tmp
+
+
+if __name__ == "__main__":
+    get_css(
+        "http://s3plus.meituan.net/v1/mss_0a06a471f9514fc79c981b5466f56b91/svgtextcss/5731cfa5230095344e879b4622796f0b.css"
+    )
