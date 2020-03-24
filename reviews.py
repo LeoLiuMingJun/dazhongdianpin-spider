@@ -96,7 +96,7 @@ class StoreReviews(object):
 
         return result
 
-    def run(self):
+    def run(self, page_limit=50):
         print(f"store {self.store_id} started")
         basic_url = f"http://www.dianping.com/shop/{self.store_id}/review_all"
 
@@ -113,6 +113,9 @@ class StoreReviews(object):
             result.extend(self.get_content_list(mapping))
             print(f"now page {count}")
             count += 1
+            if count > page_limit:
+                print("Already 50 reviews page")  # 仅抓取前 50页
+                break
             try:
                 self.driver.find_element_by_xpath('//*[@title="下一页"]').click()
                 time.sleep(10)
