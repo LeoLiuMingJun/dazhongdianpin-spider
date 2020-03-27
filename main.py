@@ -15,13 +15,8 @@ def get_store_id(start, num):
     ]
     reader = csv.DictReader(f, fieldnames=fieldnames)
     count = 0
-    header = True
     result = []
     for line in reader:
-
-        if header:
-            header = not header
-            continue
         if start > 0:
             start -= 1
             continue
@@ -37,9 +32,12 @@ def get_store_id(start, num):
 
 
 if __name__ == "__main__":
-    stores = get_store_id(0, 10)
+    start_time = time.time()
+    print(f'start at {time.time()}')
+    stores = get_store_id(384, 116)
     # stores = []
     #
     for store in stores:
         StoreReviews(store["id"], store["city"], "美食").run()
-        time.sleep(10)
+        # time.sleep(10)
+    print("--- %s seconds ---" % (time.time() - start_time))

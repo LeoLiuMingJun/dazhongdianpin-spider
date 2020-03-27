@@ -4,6 +4,9 @@ import re
 import time
 
 from selenium.common import exceptions
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
 
 from driver import Driver
 from helper import get_css, class2score
@@ -25,6 +28,12 @@ class StoreReviews(object):
         )
         for review in reviews:
             # print(review.text)
+            try:
+                star = review.find_element_by_xpath(
+                    './div/div[@class="review-rank"]/span[contains (@class,"sml-rank-stars")]'
+                ).get_attribute("class")
+            except exceptions.NoSuchElementException:
+                star = "0"
             info = {
                 "store_id": self.store_id,
                 "city": self.city,
@@ -48,17 +57,13 @@ class StoreReviews(object):
                 "detail-7 score": "",
                 "detail-8 name": "",
                 "detail-8 score": "",
-                "total_score": class2score(
-                    review.find_element_by_xpath(
-                        './div/div[@class="review-rank"]/span[contains (@class,"sml-rank-stars")]'
-                    ).get_attribute("class")
-                ),
+                "total_score": class2score(star),
             }
             i = 1
 
             #  info['detail_score']
             for score in review.find_elements_by_xpath(
-                    './div/div[@class="review-rank"]/span[@class= "score"]/span'
+                './div/div[@class="review-rank"]/span[@class= "score"]/span'
             ):
                 n, s = score.text.split("：")
                 info[f"detail-{i} name"] = n
@@ -102,7 +107,7 @@ class StoreReviews(object):
                 else:
                     word.append(c)
 
-            info["content"] = ("".join(word)).replace('\n', '').strip()
+            info["content"] = ("".join(word)).replace("\n", "").strip()
             # //*[@id="review_689070127_action"]/span[1]
             info["time_stamp"] = str(
                 review.find_element_by_xpath('.//span[@class= "time"]').text
@@ -116,7 +121,6 @@ class StoreReviews(object):
         basic_url = f"http://www.dianping.com/shop/{self.store_id}/review_all"
 
         self.driver.get(basic_url)
-        # time.sleep(60)
         result = []
 
         count = 1
