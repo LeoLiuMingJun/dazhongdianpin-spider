@@ -95,11 +95,13 @@ def get_css(css_url):
             pass
     js_obj = json.dumps(_tmp)
 
-    with open(f"./svg_info/{hash(css_url)}.dat", "w") as f:
+    with open(f"./svg_info/{hash(css_url)}.dat", "w+") as f:
         f.write(js_obj)
 
     return _tmp
 
+
+# def sent_email()
 
 if __name__ == "__main__":
     get_css(

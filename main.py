@@ -34,10 +34,9 @@ def get_store_id(start, num):
 if __name__ == "__main__":
     start_time = time.time()
     print(f'start at {time.time()}')
-    stores = get_store_id(384, 116)
+    stores = get_store_id(500, 1)
     # stores = []
     #
     for store in stores:
         StoreReviews(store["id"], store["city"], "美食").run()
-        # time.sleep(10)
     print("--- %s seconds ---" % (time.time() - start_time))

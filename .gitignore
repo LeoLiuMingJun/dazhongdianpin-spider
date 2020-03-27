@@ -134,5 +134,5 @@ dmypy.json
 # data file and svg source file
 *.csv
 *.dat
-
+*.zip
 *.html

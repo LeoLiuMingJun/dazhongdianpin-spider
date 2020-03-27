@@ -4,9 +4,6 @@ import re
 import time
 
 from selenium.common import exceptions
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.by import By
 
 from driver import Driver
 from helper import get_css, class2score
@@ -145,7 +142,7 @@ class StoreReviews(object):
         # self.save_content(content_list)
         print(f"store {self.store_id} done")
 
-        with open("data/reviews.csv", "a") as csvfile:
+        with open("data/reviews.csv", "a", encoding="utf-8") as csvfile:
             fieldnames = [
                 "store_id",
                 "city",
@@ -184,7 +181,7 @@ class StoreReviews(object):
 
 if __name__ == "__main__":
     stores = [
-        128015796,
+        65892656,
     ]
 
     for store in stores:
